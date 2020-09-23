@@ -31,13 +31,6 @@ class Calculator {
     this.currentOperand = '';
   }
 
-  chooseOperationWithOneNumber(operation) {
-    if (this.currentOperand === '') return;
-    this.computeWitnOneNumber();
-    this.operation = operation;
-    this.currentOperand = '';
-  }
-
   getDisplayNumber(number) {
     const stringNumber = number.toString();
     const integerDigits = parseFloat(stringNumber.split('.')[0]);
@@ -89,31 +82,26 @@ class Calculator {
     this.readyToReset = true;
   }
 
-  // computeWitnOneNumber() {
-  //   let computation;
-  //   const number = parseFloat(this.currentOperand);
-  //   if (isNaN(number)) return;
-  //   switch (this.operation) {
-  //     case 'x2':
-  //       computation = Math.exp(number);
-  //       break;
-  //     case '2√x':
-  //       computation = Math.sqrt(number);
-  //       break;
-  //     default:
-  //       return;
-  //   }
-  //   this.currentOperand = computation;
-  //   this.operation = undefined;
-  //   this.readyToReset = true;
-  // }
+  computeSqrt() {
+    let computation;
+    const number = parseFloat(this.currentOperand);
+
+    computation = Math.sqrt(number);
+
+    this.currentOperand = computation;
+    this.operation = undefined;
+    this.previousOperand = '';
+    this.readyToReset = true;
+  }
 
   updateDisplay() {
     console.log(this.operation, this.currentOperand);
+
     this.currentOperandTextElement.textContent = this.getDisplayNumber(this.currentOperand);
+
     if (this.operation == 'xy') {
       this.previousOperandTextElement.innerHTML = `${this.previousOperand}<sup>${this
-        .currentOperand}</sup>`;
+        .currentOperand || 'y'}</sup>`;
     } else if (this.operation != null) {
       this.previousOperandTextElement.innerText = `${this.previousOperand} ${this.operation}`;
     } else [ (this.previousOperandTextElement.innerText = '') ];
@@ -127,7 +115,7 @@ const deleteButton = document.querySelector('[data-delete]');
 const allClearButton = document.querySelector('[data-all-clear]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
-const operationWithOneNumberButtons = document.querySelectorAll('[data-operationWithOneNumber]');
+const operationSqrtButton = document.querySelector('[data-operationSqrt]');
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
 
@@ -168,9 +156,7 @@ deleteButton.addEventListener('click', () => {
   calculator.updateDisplay();
 });
 
-// operationWithOneNumberButtons.forEach((button) => [
-//   button.addEventListener('click', () => {
-//     calculator.chooseOperationWithOneNumber();
-//     // calculator.updateDisplay();
-//   })
-// ]);
+operationSqrtButton.addEventListener('click', () => {
+  calculator.computeSqrt();
+  calculator.updateDisplay();
+});

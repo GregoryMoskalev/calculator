@@ -77,6 +77,9 @@ class Calculator {
       default:
         return;
     }
+
+    computation = +computation.toFixed(10);
+
     this.currentOperand = computation;
     this.operation = undefined;
     this.previousOperand = '';

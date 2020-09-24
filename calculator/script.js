@@ -32,6 +32,7 @@ class Calculator {
   }
 
   getDisplayNumber(number) {
+    if (number === `INCORRECT DATA`) return number;
     const stringNumber = number.toString();
     const integerDigits = parseFloat(stringNumber.split('.')[0]);
     const decimalDigits = stringNumber.split('.')[1];
@@ -83,15 +84,27 @@ class Calculator {
   }
 
   computeSqrt() {
-    let computation;
-    const number = parseFloat(this.currentOperand);
+    if (this.currentOperand < 0) {
+      this.currentOperand = `INCORRECT DATA`;
+      this.operation = undefined;
+      this.previousOperand = '';
+      this.readyToReset = true;
+    } else {
+      let computation;
+      const number = parseFloat(this.currentOperand);
 
-    computation = Math.sqrt(number);
+      computation = Math.sqrt(number);
 
-    this.currentOperand = computation;
-    this.operation = undefined;
-    this.previousOperand = '';
-    this.readyToReset = true;
+      this.currentOperand = computation;
+      this.operation = undefined;
+      this.previousOperand = '';
+      this.readyToReset = true;
+    }
+    console.log(this.currentOperand);
+  }
+
+  plusNegative() {
+    this.currentOperand = -this.currentOperand;
   }
 
   updateDisplay() {
@@ -116,6 +129,7 @@ const allClearButton = document.querySelector('[data-all-clear]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
 const operationSqrtButton = document.querySelector('[data-operationSqrt]');
+const plusNegativeButton = document.querySelector('[data-plus-negative]');
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
 
@@ -158,5 +172,10 @@ deleteButton.addEventListener('click', () => {
 
 operationSqrtButton.addEventListener('click', () => {
   calculator.computeSqrt();
+  calculator.updateDisplay();
+});
+
+plusNegativeButton.addEventListener('click', () => {
+  calculator.plusNegative();
   calculator.updateDisplay();
 });

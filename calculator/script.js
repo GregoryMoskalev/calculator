@@ -7,7 +7,7 @@ class Calculator {
   }
 
   clear() {
-    this.currentOperand = '';
+    this.currentOperand = '0';
     this.previousOperand = '';
     this.operation = undefined;
   }
@@ -27,7 +27,7 @@ class Calculator {
       this.compute();
     }
     this.operation = operation;
-    this.previousOperand = this.currentOperand;
+    this.previousOperand = Number(this.currentOperand);
     this.currentOperand = '';
   }
 
@@ -174,6 +174,7 @@ deleteButton.addEventListener('click', () => {
 });
 
 operationSqrtButton.addEventListener('click', () => {
+  calculator.compute();
   calculator.computeSqrt();
   calculator.updateDisplay();
 });
